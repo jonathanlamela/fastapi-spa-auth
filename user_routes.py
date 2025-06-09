@@ -50,13 +50,13 @@ async def user_login(model: LoginRequest):
 
     expire = datetime.utcnow() + timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = {"sub": existing_user.email, "exp": expire}
-    token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM) # type: ignore
+    token = jwt.encode(to_encode, config.SECRET_KEY, algorithm=config.ALGORITHM) # type: ignore
 
     response_obj = LoginResponse(status="success")
     response = JSONResponse(content=response_obj.model_dump())
     response.set_cookie(
         key="access_token",
-        value=token, # type: ignore
+        value=token.decode("utf-8"),
         httponly=True,
         max_age=config.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         expires=config.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
