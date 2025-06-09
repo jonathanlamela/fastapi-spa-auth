@@ -3,8 +3,8 @@ from database import engine, Base
 
 Base.metadata.create_all(bind=engine)
 
-import user_routes
-import root_routes
+
+from routes import root_routes, user_routes
 
 app = FastAPI()
 
